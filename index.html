@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¿Quieres ser mi novia?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff0f5;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 4em;
+      color: black;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 30px 60px;
+      font-size: 2em;
+      margin: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 15px;
+      border: none;
+      background-color: #ff69b4;
+      color: white;
+    }
+
+    #message {
+      margin-top: 50px;
+      font-size: 2em;
+      color: #ff69b4;
+      display: none;
+    }
+
+    #noMessages {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #f46d75;
+    }
+
+    .heart {
+      position: absolute;
+      animation: float 6s ease-in-out infinite;
+      font-size: 40px;
+      opacity: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(-30px); opacity: 0.8; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>¿Quieres ser mi novia?</h1>
+  <div>
+    <button id="yesBtn">Sí</button>
+    <button id="noBtn">No</button>
+  </div>
+  <div id="noMessages"></div>
+  <div id="message">Me encanta saber que esa es tu respuesta, te amo. ❤️</div>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const message = document.getElementById('message');
+    const noMessages = document.getElementById('noMessages');
+
+    const frasesNo = [
+      "¿Estás segura de tu respuesta? 😢",
+      "¿De verdad quieres decir que no? 🥺",
+      "Esto no lo esperaba... 😥",
+      "¿Qué pasó? 😞",
+      "Eso me rompe el corazón... 💔",
+      "¿Segura que no quieres pensarlo más? 🤔",
+      "¿Realmente crees que es un no definitivo? 😓",
+      "No te vayas... 😭",
+      "Esto duele un poquito... 😞"
+    ];
+
+    // Función para crear corazones flotantes desde la parte baja
+    function crearCorazones() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '💖';
+
+      const size = Math.random() * 40 + 20;
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = size + "px";
+      heart.style.color = ["#ffb6c1", "#dda0dd", "#ff69b4", "#e6a8d7", "#c71585"][Math.floor(Math.random() * 5)];
+
+      // Posicionar el corazón en la parte baja
+      heart.style.bottom = '0';
+
+      // Animación de los corazones desde la parte baja y subiendo
+      heart.style.animation = "float 6s ease-in-out infinite";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    // Crear corazones flotantes siempre
+    setInterval(crearCorazones, 300);
+
+    // Función para lanzar muchos corazones al presionar "Sí"
+    function lanzarMasCorazones() {
+      for (let i = 0; i < 100; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '💖';
+
+        const size = Math.random() * 40 + 20;
+        heart.style.left = yesBtn.offsetLeft + yesBtn.offsetWidth / 2 - 20 + "px"; // Corazones salen del botón "Sí"
+        heart.style.fontSize = size + "px";
+        heart.style.color = ["#ffb6c1", "#dda0dd", "#ff69b4", "#e6a8d7", "#c71585"][Math.floor(Math.random() * 5)];
+
+        // Posicionarlos en la parte baja
+        heart.style.bottom = '0';
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    noBtn.addEventListener('click', () => {
+      let currentFontSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+      noBtn.style.fontSize = Math.max(10, currentFontSize - 8) + "px";
+
+      let yesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+      yesBtn.style.fontSize = (yesSize + 8) + "px";
+
+      const randomPhrase = frasesNo[Math.floor(Math.random() * frasesNo.length)];
+      noMessages.textContent = randomPhrase;
+    });
+
+    yesBtn.addEventListener('click', () => {
+      message.style.display = 'block';
+      noMessages.textContent = ''; // Ocultar las frases de "no"
+      lanzarMasCorazones(); // Agregar más corazones cuando se presiona "Sí"
+    });
+  </script>
+</body>
+</html>
